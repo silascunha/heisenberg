@@ -51,4 +51,11 @@ public class ExameServiceImpl implements ExameService {
         exameRepository.deleteById(id);
     }
 
+    @Override
+    public List<Exame> pesquisarExame(String pesquisa) {
+        List<Exame> exames = exameRepository.searchExame(pesquisa);
+
+        return exames;
+    }
+
 }

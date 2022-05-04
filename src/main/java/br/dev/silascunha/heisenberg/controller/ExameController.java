@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.dev.silascunha.heisenberg.model.Exame;
@@ -39,14 +41,14 @@ public class ExameController {
     }
 
     @PostMapping
-    public ResponseEntity<Exame> saveExame(Exame exame) {
+    public ResponseEntity<Exame> saveExame(@RequestBody Exame exame) {
         Exame exameSaved = exameService.saveExame(exame);
 
         return ResponseEntity.ok(exameSaved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Exame> updateExame(Exame exame, Integer id) {
+    public ResponseEntity<Exame> updateExame(@RequestBody Exame exame, Integer id) {
         Exame exameSaved = exameService.updateExame(exame, id);
 
         return ResponseEntity.ok(exameSaved);
@@ -57,6 +59,13 @@ public class ExameController {
         exameService.deleteExame(id);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/pesquisar")
+    public ResponseEntity<List<Exame>> pesquisarExame(@RequestParam(name = "pesquisa") String pesquisa) {
+        List<Exame> exames = exameService.pesquisarExame(pesquisa);
+
+        return ResponseEntity.ok(exames);
     }
 
 }

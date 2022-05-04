@@ -8,6 +8,8 @@ public interface ExameService {
     
     Exame getExameById(Integer id);
 
+    List<Exame> pesquisarExame(String pesquisa);
+
     List<Exame> getAllExames();
     
     Exame saveExame(Exame exame);
