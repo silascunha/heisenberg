@@ -35,9 +35,9 @@ public class Exame implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_exame")
     private Integer id;
-    @Column(name = "nome_exame", length = 100)
+    @Column(name = "nome_exame", length = 100, nullable = false)
     private String nome;
-    @Column(name = "descricao_exame", length = 3000)
+    @Column(name = "descricao_exame", length = 3000, nullable = true)
     private String descricao;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
