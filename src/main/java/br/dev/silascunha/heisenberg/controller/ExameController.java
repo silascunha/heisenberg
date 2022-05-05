@@ -49,7 +49,7 @@ public class ExameController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Exame> updateExame(@RequestBody Exame exame, Integer id) {
+    public ResponseEntity<Exame> updateExame(@RequestBody Exame exame, @PathVariable Integer id) {
         Exame exameSaved = exameService.updateExame(exame, id);
 
         return ResponseEntity.ok(exameSaved);
