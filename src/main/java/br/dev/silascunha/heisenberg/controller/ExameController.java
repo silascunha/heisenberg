@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +35,7 @@ public class ExameController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Exame> getExameById(Integer id) {
+    public ResponseEntity<Exame> getExameById(@PathVariable Integer id) {
         Exame exame = exameService.getExameById(id);
 
         return ResponseEntity.ok(exame);
@@ -55,7 +56,7 @@ public class ExameController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteExame(Integer id) {
+    public ResponseEntity<Void> deleteExame(@PathVariable Integer id) {
         exameService.deleteExame(id);
 
         return ResponseEntity.ok().build();
