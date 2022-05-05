@@ -35,14 +35,10 @@ public class Exame implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_exame")
     private Integer id;
-    @Column(name = "nome_exame")
+    @Column(name = "nome_exame", length = 100)
     private String nome;
-    @Column(name = "descricao_exame")
+    @Column(name = "descricao_exame", length = 3000)
     private String descricao;
-    @Column(name = "jejum_min")
-    private Integer jejumMin;
-    @Column(name = "jejum_max")
-    private Integer jejumMax;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_exame")
