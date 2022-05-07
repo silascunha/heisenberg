@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,8 +31,10 @@ public class Orientacao {
     @ManyToOne
     @JoinColumn(name = "id_tipo_orientacao")
     private TipoOrientacao tipo;
+    
     @ManyToOne
     @JoinColumn(name = "id_exame")
+    @JsonProperty(access = Access.WRITE_ONLY)
     private Exame exame;
     
 }
