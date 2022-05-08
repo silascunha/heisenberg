@@ -2,18 +2,18 @@ package br.dev.silascunha.heisenberg.service;
 
 import java.util.List;
 
-import br.dev.silascunha.heisenberg.dto.OrientacaoDTO;
+import br.dev.silascunha.heisenberg.dto.OrientacaoInput;
 import br.dev.silascunha.heisenberg.model.Orientacao;
 
 public interface OrientacaoService {
     
-    OrientacaoDTO getOrientacaoById(Integer id);
+    OrientacaoInput getOrientacaoById(Integer id);
 
-    List<OrientacaoDTO> getAllOrientacoes();
+    List<OrientacaoInput> getAllOrientacoes();
     
-    Orientacao saveOrientacao(OrientacaoDTO orientacaoDto);
+    Orientacao saveOrientacao(OrientacaoInput orientacaoInput);
     
-    Orientacao updateOrientacao(OrientacaoDTO orientacaoDto, Integer id);
+    Orientacao updateOrientacao(OrientacaoInput orientacaoInput, Integer id);
     
     void deleteOrientacao(Integer id);
     

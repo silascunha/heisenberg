@@ -2,16 +2,14 @@ package br.dev.silascunha.heisenberg.dto;
 
 import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrientacaoDTO implements Serializable {
-    
+@Builder
+public class OrientacaoInput implements Serializable {
+
     private Integer id;
     private Integer idTipo;
     private String nomeTipo;

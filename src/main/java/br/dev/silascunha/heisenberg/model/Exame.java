@@ -1,7 +1,9 @@
 package br.dev.silascunha.heisenberg.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -35,13 +37,16 @@ public class Exame implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_exame")
     private Integer id;
-    @Column(name = "nome_exame", length = 100, nullable = false)
+    @Column(name = "nome_exame", length = 100, nullable = false, unique = true)
     private String nome;
-    @Column(name = "descricao_exame", length = 3000, nullable = true)
+    @Column(name = "descricao_exame", length = 5000)
     private String descricao;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_exame")
     @Setter(value = AccessLevel.NONE)
     private final Set<Sinonimo> sinonimos = new HashSet<>();
+
+    @OneToMany(mappedBy = "exame")
+    private List<Orientacao> orientacoes = new ArrayList<>();
 }

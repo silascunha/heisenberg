@@ -4,19 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import br.dev.silascunha.heisenberg.dto.OrientacaoDTO;
+import br.dev.silascunha.heisenberg.dto.OrientacaoInput;
 import br.dev.silascunha.heisenberg.model.Orientacao;
 import br.dev.silascunha.heisenberg.service.OrientacaoService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/orientacoes")
+@CrossOrigin
 public class OrientacaoController {
     
     @Autowired
@@ -24,24 +20,24 @@ public class OrientacaoController {
 
 
     @GetMapping
-    public ResponseEntity<List<OrientacaoDTO>> getAllOrientacoes() {
-        List<OrientacaoDTO> orientacoesDto = orientacaoService.getAllOrientacoes();
+    public ResponseEntity<List<OrientacaoInput>> getAllOrientacoes() {
+        List<OrientacaoInput> orientacoesDto = orientacaoService.getAllOrientacoes();
 
         return ResponseEntity.ok(orientacoesDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrientacaoDTO> getOrientacaoById(@PathVariable Integer id) {
-        OrientacaoDTO orientacaoDto = orientacaoService.getOrientacaoById(id);
+    public ResponseEntity<OrientacaoInput> getOrientacaoById(@PathVariable Integer id) {
+        OrientacaoInput orientacaoInput = orientacaoService.getOrientacaoById(id);
 
-        return ResponseEntity.ok(orientacaoDto);
+        return ResponseEntity.ok(orientacaoInput);
     }
     
     @PostMapping
-    public ResponseEntity<Orientacao> saveOrientacao(@RequestBody OrientacaoDTO orientacaoDto) {
-        System.out.println(orientacaoDto);
-        Orientacao orientacao = orientacaoService.saveOrientacao(orientacaoDto);
+    public ResponseEntity<Orientacao> saveOrientacao(@RequestBody OrientacaoInput orientacaoInput) {
+        Orientacao orientacao = orientacaoService.saveOrientacao(orientacaoInput);
 
         return ResponseEntity.ok(orientacao);
     }
+
 }
