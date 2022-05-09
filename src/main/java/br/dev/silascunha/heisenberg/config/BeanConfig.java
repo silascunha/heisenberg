@@ -16,11 +16,11 @@ public class BeanConfig {
         ModelMapper modelMapper = new ModelMapper();
 
         //TODO - Adicionar mapeamentos mais assertivos aqui
-        TypeMap<Orientacao, OrientacaoInput> orientacaoToOrientacaoDto = modelMapper.createTypeMap(Orientacao.class, OrientacaoInput.class);
-
-        orientacaoToOrientacaoDto.addMappings(mapper -> {
-            mapper.map(src -> src.getExame().getId(), OrientacaoInput::setIdExame);
-        });
+//        TypeMap<Orientacao, OrientacaoInput> orientacaoToOrientacaoDto = modelMapper.createTypeMap(Orientacao.class, OrientacaoInput.class);
+//
+//        orientacaoToOrientacaoDto.addMappings(mapper -> {
+//            mapper.map(src -> src.getExame().getId(), OrientacaoInput::setIdExame);
+//        });
 
         return modelMapper;
     }
