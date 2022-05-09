@@ -45,7 +45,7 @@ public class Exame implements Serializable{
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_exame")
     @Setter(value = AccessLevel.NONE)
-    private final Set<Sinonimo> sinonimos = new HashSet<>();
+    private final List<Sinonimo> sinonimos = new ArrayList<>();
 
     @OneToMany(mappedBy = "exame")
     private List<Orientacao> orientacoes = new ArrayList<>();
