@@ -2,6 +2,7 @@ package br.dev.silascunha.heisenberg.controller;
 
 import java.util.List;
 
+import br.dev.silascunha.heisenberg.dto.OrientacaoOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +21,15 @@ public class OrientacaoController {
 
 
     @GetMapping
-    public ResponseEntity<List<OrientacaoInput>> getAllOrientacoes() {
-        List<OrientacaoInput> orientacoesDto = orientacaoService.getAllOrientacoes();
+    public ResponseEntity<List<OrientacaoOutput>> getAllOrientacoes() {
+        List<OrientacaoOutput> orientacoesDto = orientacaoService.getAllOrientacoes();
 
         return ResponseEntity.ok(orientacoesDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrientacaoInput> getOrientacaoById(@PathVariable Integer id) {
-        OrientacaoInput orientacaoInput = orientacaoService.getOrientacaoById(id);
+    public ResponseEntity<OrientacaoOutput> getOrientacaoById(@PathVariable Integer id) {
+        OrientacaoOutput orientacaoInput = orientacaoService.getOrientacaoById(id);
 
         return ResponseEntity.ok(orientacaoInput);
     }

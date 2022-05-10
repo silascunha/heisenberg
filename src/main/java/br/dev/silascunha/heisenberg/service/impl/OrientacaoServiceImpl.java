@@ -3,6 +3,7 @@ package br.dev.silascunha.heisenberg.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.dev.silascunha.heisenberg.dto.OrientacaoOutput;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,22 +24,22 @@ public class OrientacaoServiceImpl implements OrientacaoService {
 
 
     @Override
-    public OrientacaoInput getOrientacaoById(Integer id) {
+    public OrientacaoOutput getOrientacaoById(Integer id) {
         Orientacao orientacao = orientacaoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Orientacao não encontrada com o id {" + id + "}"));
 
-        return modelMapper.map(orientacao, OrientacaoInput.class);
+        return modelMapper.map(orientacao, OrientacaoOutput.class);
     }
 
     @Override
-    public List<OrientacaoInput> getAllOrientacoes() {
+    public List<OrientacaoOutput> getAllOrientacoes() {
         List<Orientacao> orientacoes = orientacaoRepository.findAll();
 
-        List<OrientacaoInput> orientacoesDto = orientacoes.stream()
-            .map(orientacao -> modelMapper.map(orientacao, OrientacaoInput.class))
+        List<OrientacaoOutput> orientacoesOutput = orientacoes.stream()
+            .map(orientacao -> modelMapper.map(orientacao, OrientacaoOutput.class))
             .collect(Collectors.toList());
 
-        return orientacoesDto;
+        return orientacoesOutput;
     }
 
     @Override
