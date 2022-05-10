@@ -2,6 +2,7 @@ package br.dev.silascunha.heisenberg.service;
 
 import java.util.List;
 
+import br.dev.silascunha.heisenberg.dto.ExameInput;
 import br.dev.silascunha.heisenberg.model.Exame;
 
 public interface ExameService {
@@ -12,9 +13,9 @@ public interface ExameService {
 
     List<Exame> getAllExames();
     
-    Exame saveExame(Exame exame);
+    Exame saveExame(ExameInput exameInput);
     
-    Exame updateExame(Exame exame, Integer id);
+    Exame updateExame(ExameInput exameInput, Integer id);
     
     void deleteExame(Integer id);
     

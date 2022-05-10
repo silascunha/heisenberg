@@ -2,6 +2,8 @@ package br.dev.silascunha.heisenberg.service.impl;
 
 import java.util.List;
 
+import br.dev.silascunha.heisenberg.dto.ExameInput;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +11,15 @@ import org.springframework.stereotype.Service;
 import br.dev.silascunha.heisenberg.model.Exame;
 import br.dev.silascunha.heisenberg.repository.ExameRepository;
 import br.dev.silascunha.heisenberg.service.ExameService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ExameServiceImpl implements ExameService {
 
     @Autowired
     private ExameRepository exameRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public Exame getExameById(Integer id) {
@@ -31,17 +36,22 @@ public class ExameServiceImpl implements ExameService {
     }
 
     @Override
-    public Exame saveExame(Exame exame) {
+    @Transactional
+    public Exame saveExame(ExameInput exameInput) {
+        Exame exame = modelMapper.map(exameInput, Exame.class);
+
+        System.out.println(exame);
         exameRepository.save(exame);
 
         return exame;
     }
 
     @Override
-    public Exame updateExame(Exame exame, Integer id) {
+    @Transactional
+    public Exame updateExame(ExameInput exameInput, Integer id) {
         Exame exameInDB = exameRepository.getById(id);
 
-        BeanUtils.copyProperties(exame, exameInDB, "id");
+        modelMapper.map(exameInput, exameInDB);
 
         return exameRepository.save(exameInDB);
     }

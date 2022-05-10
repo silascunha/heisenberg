@@ -2,6 +2,7 @@ package br.dev.silascunha.heisenberg.controller;
 
 import java.util.List;
 
+import br.dev.silascunha.heisenberg.dto.ExameInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -42,15 +43,15 @@ public class ExameController {
     }
 
     @PostMapping
-    public ResponseEntity<Exame> saveExame(@RequestBody Exame exame) {
-        Exame exameSaved = exameService.saveExame(exame);
+    public ResponseEntity<Exame> saveExame(@RequestBody ExameInput exameInput) {
+        Exame exameSaved = exameService.saveExame(exameInput);
 
         return ResponseEntity.ok(exameSaved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Exame> updateExame(@RequestBody Exame exame, @PathVariable Integer id) {
-        Exame exameSaved = exameService.updateExame(exame, id);
+    public ResponseEntity<Exame> updateExame(@RequestBody ExameInput exameInput, @PathVariable Integer id) {
+        Exame exameSaved = exameService.updateExame(exameInput, id);
 
         return ResponseEntity.ok(exameSaved);
     }
