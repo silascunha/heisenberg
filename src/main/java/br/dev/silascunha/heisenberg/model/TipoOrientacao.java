@@ -3,13 +3,7 @@ package br.dev.silascunha.heisenberg.model;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "TIPO_ORIENTACAO")
+@Table(name = "TIPO_ORIENTACAO", uniqueConstraints = @UniqueConstraint(name = "UK_NOME_TIPO_ORIENTACAO", columnNames = "nome_tipo_orientacao"))
 public class TipoOrientacao implements Serializable {
     
     @Id

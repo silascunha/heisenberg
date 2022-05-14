@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Builder
 public class OrientacaoOutput implements Serializable {
 
-    private Integer id;
+    private Integer idOrientacao;
     private Integer idTipo;
     private String nomeTipo;
     private Integer idExame;

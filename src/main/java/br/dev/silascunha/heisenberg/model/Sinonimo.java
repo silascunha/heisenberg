@@ -1,11 +1,6 @@
 package br.dev.silascunha.heisenberg.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "SINONIMO")
+@Table(name = "SINONIMO", uniqueConstraints = {@UniqueConstraint(name = "UK_SINONIMO", columnNames = {"nome_sinonimo", "id_exame"})})
 public class Sinonimo implements Serializable {
     
     @Id

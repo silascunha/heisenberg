@@ -3,6 +3,7 @@ package br.dev.silascunha.heisenberg.service.impl;
 import java.util.List;
 
 import br.dev.silascunha.heisenberg.dto.ExameInput;
+import br.dev.silascunha.heisenberg.service.OrientacaoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class ExameServiceImpl implements ExameService {
 
     @Autowired
     private ExameRepository exameRepository;
+
+    @Autowired
+    private OrientacaoService orientacaoService;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -42,6 +47,12 @@ public class ExameServiceImpl implements ExameService {
 
         System.out.println(exame);
         exameRepository.save(exame);
+
+        exameInput.getOrientacoes().forEach(orientacaoInput -> {
+            orientacaoInput.setIdExame(exame.getId());
+
+            orientacaoService.saveOrientacao(orientacaoInput);
+        });
 
         return exame;
     }
