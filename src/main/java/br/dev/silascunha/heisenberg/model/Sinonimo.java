@@ -20,9 +20,9 @@ public class Sinonimo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_sinonimo")
-    @EqualsAndHashCode.Include
     private Integer id;
     @Column(name = "nome_sinonimo", nullable = false)
+    @EqualsAndHashCode.Include
     private String nome;
 
 }

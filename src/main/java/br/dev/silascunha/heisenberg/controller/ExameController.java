@@ -60,7 +60,7 @@ public class ExameController {
     public ResponseEntity<Void> deleteExame(@PathVariable Integer id) {
         exameService.deleteExame(id);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/pesquisar")

@@ -1,12 +1,24 @@
 package br.dev.silascunha.heisenberg.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import br.dev.silascunha.heisenberg.dto.ExameInput;
+import br.dev.silascunha.heisenberg.dto.OrientacaoInput;
+import br.dev.silascunha.heisenberg.dto.SinonimoInput;
+import br.dev.silascunha.heisenberg.model.Orientacao;
+import br.dev.silascunha.heisenberg.model.Sinonimo;
 import br.dev.silascunha.heisenberg.service.OrientacaoService;
+import br.dev.silascunha.heisenberg.service.exception.ResourceNotFoundException;
+import br.dev.silascunha.heisenberg.service.exception.ValidacaoException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.dev.silascunha.heisenberg.model.Exame;
@@ -43,9 +55,19 @@ public class ExameServiceImpl implements ExameService {
     @Override
     @Transactional
     public Exame saveExame(ExameInput exameInput) {
-        Exame exame = modelMapper.map(exameInput, Exame.class);
+        validarExameInput(exameInput, null);
 
-        System.out.println(exame);
+        Exame exame = modelMapper.map(exameInput, Exame.class);
+        exame.setSinonimos(
+                exameInput.getSinonimos().stream()
+                        .map(sinInput -> modelMapper.map(sinInput, Sinonimo.class)).collect(Collectors.toSet())
+        );
+
+        exame.setOrientacoes(
+                exameInput.getOrientacoes().stream()
+                        .map(oriInput -> modelMapper.map(oriInput, Orientacao.class)).collect(Collectors.toList())
+        );
+
         exameRepository.save(exame);
 
         exameInput.getOrientacoes().forEach(orientacaoInput -> {
@@ -60,16 +82,60 @@ public class ExameServiceImpl implements ExameService {
     @Override
     @Transactional
     public Exame updateExame(ExameInput exameInput, Integer id) {
-        Exame exameInDB = exameRepository.getById(id);
+        validarExameInput(exameInput, id);
+
+        Exame exameInDB = exameRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Exame não encontrado para o id {" + id + "}"));
 
         modelMapper.map(exameInput, exameInDB);
 
-        return exameRepository.save(exameInDB);
+        Set<Sinonimo> sinonimos = exameInput.getSinonimos().stream()
+                .map(sinInput -> modelMapper.map(sinInput, Sinonimo.class)).collect(Collectors.toSet());
+
+
+        exameInDB.getSinonimos().retainAll(sinonimos);
+        exameInDB.getSinonimos().addAll(sinonimos);
+
+
+        exameRepository.save(exameInDB);
+
+        if (exameInput.getOrientacoes() != null && !exameInput.getOrientacoes().isEmpty()) {
+            List<Orientacao> orientacoes = new ArrayList<>(exameInDB.getOrientacoes());
+
+            Map<Integer, OrientacaoInput> orientacaoInputMap = exameInput.getOrientacoes().stream()
+                    .collect(Collectors.toMap(OrientacaoInput::getIdTipo, orientacaoInput -> orientacaoInput));
+
+
+            orientacoes.forEach(orientacao -> {
+                OrientacaoInput orientacaoInput = orientacaoInputMap.get(orientacao.getTipo().getId());
+
+                if (orientacaoInput != null) {
+                    orientacaoInput.setIdExame(id);
+                    orientacaoService.updateOrientacao(orientacaoInput, orientacao.getId());
+                    orientacaoInputMap.remove(orientacao.getTipo().getId());
+                }
+            });
+
+            if (!orientacaoInputMap.isEmpty()) {
+                orientacaoInputMap.values().forEach(orientacaoInput -> {
+                    orientacaoInput.setIdExame(id);
+                    orientacaoService.saveOrientacao(orientacaoInput);
+                });
+            }
+        }
+
+        return exameInDB;
     }
 
     @Override
+    @Transactional
     public void deleteExame(Integer id) {
-        exameRepository.deleteById(id);
+        Exame exame = exameRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Exame não encontrado"));
+
+        exame.getOrientacoes().forEach(orientacao -> {
+            orientacaoService.deleteOrientacao(orientacao.getId());
+        });
+
+        exameRepository.delete(exame);
     }
 
     @Override
@@ -79,4 +145,17 @@ public class ExameServiceImpl implements ExameService {
         return exames;
     }
 
+    private void validarExameInput(ExameInput exameInput, Integer exameId) {
+        if (exameInput.getNome() == null || exameInput.getNome().isBlank()) {
+            throw new ValidacaoException("O nome do exame é obrigatório");
+        }
+
+        Exame exameDB = exameRepository.findByNomeIgnoreCase(exameInput.getNome());
+
+        boolean nomeExameJaExiste = exameDB != null && !exameDB.getId().equals(exameId);
+
+        if (nomeExameJaExiste) {
+            throw new ValidacaoException("Já existe um exame com o mesmo nome");
+        }
+    }
 }

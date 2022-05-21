@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import br.dev.silascunha.heisenberg.dto.OrientacaoOutput;
+import br.dev.silascunha.heisenberg.service.exception.DatabaseException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.dev.silascunha.heisenberg.dto.OrientacaoInput;
@@ -13,6 +15,7 @@ import br.dev.silascunha.heisenberg.model.Orientacao;
 import br.dev.silascunha.heisenberg.repository.OrientacaoRepository;
 import br.dev.silascunha.heisenberg.service.OrientacaoService;
 import br.dev.silascunha.heisenberg.service.exception.ResourceNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrientacaoServiceImpl implements OrientacaoService {
@@ -43,25 +46,37 @@ public class OrientacaoServiceImpl implements OrientacaoService {
     }
 
     @Override
+    @Transactional
     public Orientacao saveOrientacao(OrientacaoInput orientacaoInput) {
+
         Orientacao orientacao = modelMapper.map(orientacaoInput, Orientacao.class);
 
-        System.out.println(orientacao.getExame().getId());
+        try {
+            orientacao = orientacaoRepository.save(orientacao);
 
-        return orientacaoRepository.save(orientacao);
+            return orientacao;
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Orientação com idExame e idTipo duplicados", e);
+        }
     }
 
     @Override
+    @Transactional
     public Orientacao updateOrientacao(OrientacaoInput orientacaoInput, Integer id) {
         Orientacao orientacao = orientacaoRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Orientacao não encontrada com o id {" + id + "}"));
 
         modelMapper.map(orientacaoInput, orientacao);
 
-        return orientacaoRepository.save(orientacao);
+        try {
+            return orientacaoRepository.save(orientacao);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Orientação com idExame e idTipo duplicados", e);
+        }
     }
 
     @Override
+    @Transactional
     public void deleteOrientacao(Integer id) {
         try {
             orientacaoRepository.deleteById(id);
@@ -70,5 +85,10 @@ public class OrientacaoServiceImpl implements OrientacaoService {
             throw new ResourceNotFoundException("Orientacao não encontrada com o id {" + id + "}");
         }
     }
-    
+
+    @Override
+    public List<Orientacao> listarPorIdExame(Integer idExame) {
+        return orientacaoRepository.findAllByExameId(idExame);
+    }
+
 }

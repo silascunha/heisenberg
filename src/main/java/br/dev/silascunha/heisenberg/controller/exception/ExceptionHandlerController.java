@@ -4,6 +4,8 @@ import java.time.Instant;
 
 import javax.servlet.http.HttpServletRequest;
 
+import br.dev.silascunha.heisenberg.service.exception.DatabaseException;
+import br.dev.silascunha.heisenberg.service.exception.ValidacaoException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,37 @@ public class ExceptionHandlerController {
                 .erro("Recurso não encontrado")
                 .mensagem(e.getMessage())
                 .momento(Instant.now())
+                .caminho(request.getRequestURI())
+                .status(status.value())
+                .build();
+
+        return ResponseEntity.status(status).body(respostaErro);
+    }
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity<RespostaErro> validacaoException(ValidacaoException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        RespostaErro respostaErro = RespostaErro.builder()
+                .erro("Erro de validação")
+                .mensagem(e.getMessage())
+                .momento(Instant.now())
+                .caminho(request.getRequestURI())
+                .status(status.value())
+                .build();
+
+        return ResponseEntity.status(status).body(respostaErro);
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<RespostaErro> validacaoException(DatabaseException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        RespostaErro respostaErro = RespostaErro.builder()
+                .erro("Erro de banco de dados")
+                .mensagem(e.getMessage())
+                .momento(Instant.now())
+                .caminho(request.getRequestURI())
                 .status(status.value())
                 .build();
 
@@ -47,7 +80,7 @@ public class ExceptionHandlerController {
         private String erro;
         private String mensagem;
         private String caminho;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
         private Instant momento;
         private Integer status;
 

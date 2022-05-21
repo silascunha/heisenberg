@@ -17,5 +17,7 @@ public interface OrientacaoService {
     Orientacao updateOrientacao(OrientacaoInput orientacaoInput, Integer id);
     
     void deleteOrientacao(Integer id);
+
+    List<Orientacao> listarPorIdExame(Integer idExame);
     
 }

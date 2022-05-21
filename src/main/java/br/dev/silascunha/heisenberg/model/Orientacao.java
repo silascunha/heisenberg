@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,6 +30,7 @@ public class Orientacao implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_exame", nullable = false)
     @JsonIgnore
+    @ToString.Exclude
     private Exame exame;
     
 }

@@ -16,4 +16,5 @@ public interface ExameRepository extends JpaRepository<Exame, Integer> {
     @Query(value = QUERY_EXAMES_PESQUISA, nativeQuery = true)
     List<Exame> searchExame(String searchTerm);
 
+    Exame findByNomeIgnoreCase(String nome);
 }
