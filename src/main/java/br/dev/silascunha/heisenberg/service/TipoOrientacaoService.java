@@ -9,4 +9,8 @@ public interface TipoOrientacaoService {
 	TipoOrientacao getTipoOrientacaoById(Integer id);
 
 	List<TipoOrientacao> listarTiposOrientacao();
+
+	TipoOrientacao salvarTipoOrientacao(TipoOrientacao tipoOrientacao);
+
+	TipoOrientacao atualizarTipoOrientacao(TipoOrientacao tipoOrientacao, Integer tipoId);
 }
