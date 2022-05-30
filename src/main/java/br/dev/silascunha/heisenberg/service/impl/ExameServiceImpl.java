@@ -95,7 +95,6 @@ public class ExameServiceImpl implements ExameService {
         exameInDB.getSinonimos().retainAll(sinonimos);
         exameInDB.getSinonimos().addAll(sinonimos);
 
-
         exameRepository.save(exameInDB);
 
         if (exameInput.getOrientacoes() != null && !exameInput.getOrientacoes().isEmpty()) {

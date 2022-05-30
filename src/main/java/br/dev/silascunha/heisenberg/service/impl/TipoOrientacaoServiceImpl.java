@@ -2,6 +2,7 @@ package br.dev.silascunha.heisenberg.service.impl;
 
 import java.util.List;
 
+import br.dev.silascunha.heisenberg.service.exception.ValidacaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,9 @@ import br.dev.silascunha.heisenberg.model.TipoOrientacao;
 import br.dev.silascunha.heisenberg.repository.TipoOrientacaoRepository;
 import br.dev.silascunha.heisenberg.service.TipoOrientacaoService;
 import br.dev.silascunha.heisenberg.service.exception.ResourceNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class TipoOrientacaoServiceImpl implements TipoOrientacaoService {
@@ -31,5 +35,43 @@ public class TipoOrientacaoServiceImpl implements TipoOrientacaoService {
 
 		return tiposOrientacao;
 	}
-	
+
+	@Transactional
+	@Override
+	public TipoOrientacao salvarTipoOrientacao(TipoOrientacao tipoOrientacao) {
+		validarTipoOrientacao(tipoOrientacao, null);
+		tipoOrientacao = tipoOrientacaoRepository.save(tipoOrientacao);
+
+		return tipoOrientacao;
+	}
+
+	@Override
+	public TipoOrientacao atualizarTipoOrientacao(TipoOrientacao tipoOrientacao, Integer tipoId) {
+		try {
+			validarTipoOrientacao(tipoOrientacao, tipoId);
+
+			TipoOrientacao tipoOrientacaoDB = tipoOrientacaoRepository.getById(tipoId);
+			tipoOrientacaoDB.setNome(tipoOrientacao.getNome());
+
+			tipoOrientacaoRepository.save(tipoOrientacaoDB);
+			return tipoOrientacaoDB;
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("TipoOrientacao não encontrado com o ID {" + tipoId + "}");
+		}
+
+	}
+
+	private void validarTipoOrientacao(TipoOrientacao tipoOrientacao, Integer tipoId) {
+		if (tipoOrientacao.getNome() == null || tipoOrientacao.getNome().isBlank()) {
+			throw new ValidacaoException("O nome do tipo é obrigatório");
+		}
+
+		TipoOrientacao tipoOrientacaoDB = tipoOrientacaoRepository.findByNomeIgnoreCase(tipoOrientacao.getNome());
+
+		boolean nomeTipoExiste = tipoOrientacaoDB != null && !tipoOrientacaoDB.getId().equals(tipoId);
+
+		if (nomeTipoExiste) {
+			throw new ValidacaoException("Já existe um tipo de orientação com o mesmo nome");
+		}
+	}
 }
