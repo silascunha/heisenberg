@@ -40,12 +40,14 @@ public class TipoOrientacaoServiceImpl implements TipoOrientacaoService {
 	@Override
 	public TipoOrientacao salvarTipoOrientacao(TipoOrientacao tipoOrientacao) {
 		validarTipoOrientacao(tipoOrientacao, null);
+		tipoOrientacao.setId(null);
 		tipoOrientacao = tipoOrientacaoRepository.save(tipoOrientacao);
 
 		return tipoOrientacao;
 	}
 
 	@Override
+	@Transactional
 	public TipoOrientacao atualizarTipoOrientacao(TipoOrientacao tipoOrientacao, Integer tipoId) {
 		try {
 			validarTipoOrientacao(tipoOrientacao, tipoId);
