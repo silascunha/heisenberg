@@ -49,18 +49,13 @@ public class TipoOrientacaoServiceImpl implements TipoOrientacaoService {
 	@Override
 	@Transactional
 	public TipoOrientacao atualizarTipoOrientacao(TipoOrientacao tipoOrientacao, Integer tipoId) {
-		try {
-			validarTipoOrientacao(tipoOrientacao, tipoId);
+		validarTipoOrientacao(tipoOrientacao, tipoId);
 
-			TipoOrientacao tipoOrientacaoDB = tipoOrientacaoRepository.getById(tipoId);
-			tipoOrientacaoDB.setNome(tipoOrientacao.getNome());
+		TipoOrientacao tipoOrientacaoDB = tipoOrientacaoRepository.findById(tipoId).orElseThrow(() -> new ResourceNotFoundException("TipoOrientacao não encontrado com o id {" + tipoId + "}"));
+		tipoOrientacaoDB.setNome(tipoOrientacao.getNome());
 
-			tipoOrientacaoRepository.save(tipoOrientacaoDB);
-			return tipoOrientacaoDB;
-		} catch (EntityNotFoundException e) {
-			throw new ResourceNotFoundException("TipoOrientacao não encontrado com o ID {" + tipoId + "}");
-		}
-
+		tipoOrientacaoRepository.save(tipoOrientacaoDB);
+		return tipoOrientacaoDB;
 	}
 
 	private void validarTipoOrientacao(TipoOrientacao tipoOrientacao, Integer tipoId) {
