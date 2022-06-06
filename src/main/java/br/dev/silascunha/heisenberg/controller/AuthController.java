@@ -41,7 +41,7 @@ public class AuthController {
     @GetMapping("/user")
     public ResponseEntity<?> user() {
         //Se não estiver autenticado, retorna 401 automaticamente
-        
-        return ResponseEntity.ok().body(SecurityContextHolder.getContext().getAuthentication().getDetails());
+
+        return ResponseEntity.ok().body(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 }
