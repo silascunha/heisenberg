@@ -38,10 +38,10 @@ public class WebSecurityConfig {
                 .cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
                 .authorizeRequests()
-//                .antMatchers(PUBLIC_PATHS).permitAll()
-//                .antMatchers(HttpMethod.GET, PUBLIC_GET_PATHS).permitAll()
-//                .anyRequest().authenticated();
-                .anyRequest().permitAll(); //descomentar as linhas acima e comentar esta
+               .antMatchers(PUBLIC_PATHS).permitAll()
+               .antMatchers(HttpMethod.GET, PUBLIC_GET_PATHS).permitAll()
+               .anyRequest().authenticated();
+                // .anyRequest().permitAll();
 
         http.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
