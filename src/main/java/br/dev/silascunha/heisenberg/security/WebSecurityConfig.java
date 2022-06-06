@@ -23,6 +23,7 @@ public class WebSecurityConfig {
     private static final String[] PUBLIC_PATHS = {
         "/auth/login",
         "/swagger-ui/**",
+        "/swagger-ui.html",
         "/v3/api-docs/**"
     };
 
