@@ -1,5 +1,6 @@
 package br.dev.silascunha.heisenberg.controller;
 
+import br.dev.silascunha.heisenberg.controller.openapi.AuthControllerOpenApi;
 import br.dev.silascunha.heisenberg.dto.LoginResponse;
 import br.dev.silascunha.heisenberg.dto.UsuarioLogin;
 import br.dev.silascunha.heisenberg.security.JwtTokenUtil;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements AuthControllerOpenApi {
 
     @Autowired
     private AuthenticationManager authenticationManager;
