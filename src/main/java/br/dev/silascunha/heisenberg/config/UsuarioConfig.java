@@ -24,6 +24,7 @@ public class UsuarioConfig implements CommandLineRunner {
     @Autowired
     private PerfilRepository perfilRepository;
 
+    //cria um usuário admin padrão caso não exista nenhum usuário cadastrado
     @Override
     public void run(String... args) throws Exception {
         long quantidadeUsuarios = usuarioRepository.count();

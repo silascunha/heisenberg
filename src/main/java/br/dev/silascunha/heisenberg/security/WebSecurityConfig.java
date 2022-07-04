@@ -39,10 +39,10 @@ public class WebSecurityConfig {
                 .cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
                 .authorizeRequests()
-//               .antMatchers(PUBLIC_PATHS).permitAll()
+//               .antMatchers(PUBLIC_PATHS).permitAll()         //descomentar do 42 ao 44 e comentar a linha 45 para que a autenticação funcione
 //               .antMatchers(HttpMethod.GET, PUBLIC_GET_PATHS).permitAll()
 //               .anyRequest().authenticated();
-                 .anyRequest().permitAll();
+                 .anyRequest().permitAll();         //descomentar a linha 45 e comentar do 42 ao 44 para deixar os endpoints publicos
 
         http.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
